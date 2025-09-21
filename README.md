@@ -13,8 +13,9 @@ This module is a simple stopwatch for measuring elapsed time in a game. It allow
 
 ## 📜 License
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 Free to modify and use.
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 ## 🛠️ Usage
 ### Create a new stopwatch
