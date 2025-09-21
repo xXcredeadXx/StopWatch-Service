@@ -74,7 +74,7 @@ print(info)
 ## 💾 Installation
 
 1. Download or clone this repository.  
-2. Place the `StopWatch.lua` module inside `ReplicatedStorage` or your preferred folder in Roblox Studio.  
+2. Place the `StopWatch.luau` module inside `ReplicatedStorage` or your preferred folder in Roblox Studio.  
 3. Require it in your scripts.
 
 ```lua
