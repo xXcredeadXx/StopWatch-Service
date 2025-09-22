@@ -26,7 +26,6 @@ type object = typeof(setmetatable({} :: {
 	time: number,        -- elapsed time
 	startTime: number,   -- when the stopwatch was started
 	isRunning: boolean,  -- whether stopwatch is active
-	thread: thread,      -- background thread updating elapsed time
 }, {} :: stopWatch))
 
 --// Functions
@@ -34,44 +33,35 @@ type object = typeof(setmetatable({} :: {
 -- Creates a new stopwatch object
 function stopWatch.new()
 	return setmetatable({
-		['time'] = 0,
-		['startTime'] = 0,
-		['isRunning'] = false,
-		['thread'] = nil
-	}, stopWatch :: stopWatch) :: object
+		time = 0,           -- elapsed time
+		startTime = 0,      -- start time
+		isRunning = false,  -- running state
+	}, stopWatch) :: object
 end
 
--- Starts the stopwatch (spawns update loop if needed)
+-- Starts the stopwatch
 function stopWatch:Start()
-	if self.isRunning then
-		return
-	end
-	self.isRunning = true
-	self.startTime = os.clock()
-	self.time = 0
-
-	-- Run update loop in background once
-	if self.thread == nil then
-		self.thread = task.spawn(function()
-			while self.isRunning do
-				task.wait()
-				local currentTime = os.clock()
-				self.time = currentTime - self.startTime
-			end
-		end)
+	if not self.isRunning then
+		self.isRunning = true
+		self.startTime = os.clock()
 	end
 end
 
 -- Stops the stopwatch (keeps last measured time)
 function stopWatch:Stop()
 	if self.isRunning then
+		self.time += os.clock() - self.startTime
 		self.isRunning = false
 	end
 end
 
 -- Reads current elapsed time
 function stopWatch:Read()
-	return self.time
+	if self.isRunning then
+		return self.time + (os.clock() - self.startTime)
+	else
+		return self.time
+	end
 end
 
 -- Resets stopwatch to initial state
@@ -79,7 +69,6 @@ function stopWatch:Reset()
 	self.isRunning = false
 	self.startTime = 0
 	self.time = 0
-	self.thread = nil
 end
 
 -- Returns full object info (mainly for debugging)
